@@ -1,0 +1,40 @@
+Fri, 25 Jan 2019 17:46:05 INFO     reading file reviews_data.txt.gz...this may take a while
+Fri, 25 Jan 2019 17:46:05 INFO     read 0 reviews
+Fri, 25 Jan 2019 17:46:09 INFO     read 10000 reviews
+Fri, 25 Jan 2019 17:46:14 INFO     read 20000 reviews
+Fri, 25 Jan 2019 17:46:19 INFO     read 30000 reviews
+Fri, 25 Jan 2019 17:46:24 INFO     read 40000 reviews
+Fri, 25 Jan 2019 17:46:29 INFO     read 50000 reviews
+Fri, 25 Jan 2019 17:46:35 INFO     read 60000 reviews
+Fri, 25 Jan 2019 17:46:39 INFO     read 70000 reviews
+Fri, 25 Jan 2019 17:46:43 INFO     read 80000 reviews
+Fri, 25 Jan 2019 17:46:47 INFO     read 90000 reviews
+Fri, 25 Jan 2019 17:46:51 INFO     read 100000 reviews
+Fri, 25 Jan 2019 17:46:55 INFO     read 110000 reviews
+Fri, 25 Jan 2019 17:47:00 INFO     read 120000 reviews
+Fri, 25 Jan 2019 17:47:04 INFO     read 130000 reviews
+Fri, 25 Jan 2019 17:47:08 INFO     read 140000 reviews
+Fri, 25 Jan 2019 17:47:13 INFO     read 150000 reviews
+Fri, 25 Jan 2019 17:47:17 INFO     read 160000 reviews
+Fri, 25 Jan 2019 17:47:21 INFO     read 170000 reviews
+Fri, 25 Jan 2019 17:47:25 INFO     read 180000 reviews
+Fri, 25 Jan 2019 17:47:30 INFO     read 190000 reviews
+Fri, 25 Jan 2019 17:47:34 INFO     read 200000 reviews
+Fri, 25 Jan 2019 17:47:39 INFO     read 210000 reviews
+Fri, 25 Jan 2019 17:47:43 INFO     read 220000 reviews
+Fri, 25 Jan 2019 17:47:47 INFO     read 230000 reviews
+Fri, 25 Jan 2019 17:47:52 INFO     read 240000 reviews
+Fri, 25 Jan 2019 17:47:56 INFO     read 250000 reviews
+Fri, 25 Jan 2019 17:47:58 WARNING  consider setting layer size to a multiple of 4 for greater performance
+Fri, 25 Jan 2019 17:47:58 INFO     collecting all words and their counts
+Fri, 25 Jan 2019 17:47:58 WARNING  Each 'sentences' item should be a list of words (usually unicode strings). First item here is instead plain <type 'unicode'>.
+Fri, 25 Jan 2019 17:47:58 INFO     PROGRESS: at sentence #0, processed 0 words, keeping 0 word types
+Fri, 25 Jan 2019 17:47:58 INFO     collected 3 word types from a corpus of 3 raw words and 1 sentences
+Fri, 25 Jan 2019 17:47:58 INFO     Loading a fresh vocabulary
+Fri, 25 Jan 2019 17:47:58 INFO     min_count=2 retains 0 unique words (0% of original 3, drops 3)
+Fri, 25 Jan 2019 17:47:58 INFO     min_count=2 leaves 0 word corpus (0% of original 3, drops 3)
+Fri, 25 Jan 2019 17:47:58 INFO     deleting the raw counts dictionary of 3 items
+Fri, 25 Jan 2019 17:47:58 INFO     sample=0.001 downsamples 0 most-common words
+Fri, 25 Jan 2019 17:47:58 INFO     downsampling leaves estimated 0 word corpus (0.0% of prior 0)
+Fri, 25 Jan 2019 17:47:58 INFO     estimated required memory for 0 words and 150 dimensions: 0 bytes
+Fri, 25 Jan 2019 17:47:58 INFO     resetting layer weights
