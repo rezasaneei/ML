@@ -1,7 +1,7 @@
 # PCA built-in train function
 
 # read csv file housing.csv
-housing = read.csv("c:/housing.csv")
+housing = read.csv("housing.csv")
 
 # add dummy variables for categorical column 'ocean_proximity'
 library(dummies)
