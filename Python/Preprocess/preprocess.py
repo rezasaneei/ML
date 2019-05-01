@@ -1,4 +1,4 @@
-
+﻿
 # coding: utf-8
 
 # # Summarizing Text with Amazon Reviews
@@ -14,7 +14,6 @@
 # - Training the Model
 # - Making Our Own Summaries
 
-# In[49]:
 
 import pandas as pd
 import numpy as np
@@ -28,30 +27,22 @@ import pickle
 #print('TensorFlow Version: {}'.format(tf.__version__))
 
 
-# ## Insepcting the Data
-
-# In[2]:
 
 reviews = pd.read_csv("Reviews.csv")
 
 
-# In[3]:
 
 reviews.shape
 
 
-# In[4]:
 
 reviews.head()
 
-
-# In[5]:
 
 # Check for any nulls values
 reviews.isnull().sum()
 
 
-# In[6]:
 
 # Remove null values and unneeded features
 reviews = reviews.dropna()
@@ -60,12 +51,10 @@ reviews = reviews.drop(['Id','ProductId','UserId','ProfileName','HelpfulnessNume
 reviews = reviews.reset_index(drop=True)
 
 
-# In[7]:
 
 reviews.head()
 
 
-# In[8]:
 
 # Inspecting some of the reviews
 for i in range(5):
@@ -77,7 +66,6 @@ for i in range(5):
 
 # ## Preparing the Data
 
-# In[9]:
 
 # A list of contractions from http://stackoverflow.com/questions/19790188/expanding-english-language-contractions-in-python
 contractions = { 
@@ -156,9 +144,6 @@ contractions = {
 "you're": "you are"
 }
 
-
-# In[203]:
-
 def clean_text(text, remove_stopwords = True):
     '''Remove unwanted characters, stopwords, and format the text to create fewer nulls word embeddings'''
     
@@ -199,7 +184,6 @@ def clean_text(text, remove_stopwords = True):
 
 # We will remove the stopwords from the texts because they do not provide much use for training our model. However, we will keep them for our summaries so that they sound more like natural phrases. 
 
-# In[204]:
 
 # Clean the summaries and texts
 clean_summaries = []
@@ -213,8 +197,6 @@ for text in reviews.Text:
 print("Texts are complete.")
 
 
-# In[206]:
-
 # Inspect the cleaned summaries and texts to ensure they have been cleaned well
 for i in range(5):
     print("Clean Review #",i+1)
@@ -223,7 +205,6 @@ for i in range(5):
     print()
 
 
-# In[207]:
 
 def count_words(count_dict, text):
     '''Count the number of occurrences of each word in a set of text'''
@@ -235,9 +216,6 @@ def count_words(count_dict, text):
                 count_dict[word] += 1
 
 
-# In[208]:
-
-# Find the number of times each word was used and the size of the vocabulary
 word_counts = {}
 
 count_words(word_counts, clean_summaries)
@@ -246,10 +224,8 @@ count_words(word_counts, clean_texts)
 print("Size of Vocabulary:", len(word_counts))
 
 
-# In[209]:
 
-# Load Conceptnet Numberbatch's (CN) embeddings, similar to GloVe, but probably better 
-# (https://github.com/commonsense/conceptnet-numberbatch)
+
 embeddings_index = {}
 with open('numberbatch-en-17.02.txt', encoding='utf-8') as f:
     for line in f:
@@ -261,9 +237,6 @@ with open('numberbatch-en-17.02.txt', encoding='utf-8') as f:
 print('Word embeddings:', len(embeddings_index))
 
 
-# In[210]:
-
-# Find the number of words that are missing from CN, and are used more than our threshold.
 missing_words = 0
 threshold = 20
 
@@ -277,12 +250,6 @@ missing_ratio = round(missing_words/len(word_counts),4)*100
 print("Number of words missing from CN:", missing_words)
 print("Percent of words that are missing from vocabulary: {}%".format(missing_ratio))
 
-
-# I use a threshold of 20, so that words not in CN can be added to our word_embedding_matrix, but they need to be common enough in the reviews so that the model can understand their meaning.
-
-# In[211]:
-
-# Limit the vocab that we will use to words that appear ≥ threshold or are in GloVe
 
 #dictionary to convert words to integers
 vocab_to_int = {} 
@@ -320,7 +287,6 @@ print("Number of words we will use:", len(vocab_to_int))
 print("Percent of words we will use: {}%".format(usage_ratio))
 
 
-# In[212]:
 
 # Need to use 300 for embedding dimensions to match CN's vectors.
 embedding_dim = 300
@@ -341,7 +307,6 @@ for word, i in vocab_to_int.items():
 print(len(word_embedding_matrix))
 
 
-# In[213]:
 
 def convert_to_ints(text, word_count, unk_count, eos=False):
     '''Convert words in text to an integer.
@@ -364,7 +329,6 @@ def convert_to_ints(text, word_count, unk_count, eos=False):
     return ints, word_count, unk_count
 
 
-# In[214]:
 
 # Apply convert_to_ints to clean_summaries and clean_texts
 word_count = 0
@@ -380,8 +344,6 @@ print("Total number of UNKs in headlines:", unk_count)
 print("Percent of words that are UNK: {}%".format(unk_percent))
 
 
-# In[215]:
-
 def create_lengths(text):
     '''Create a data frame of the sentence lengths from a text'''
     lengths = []
@@ -389,8 +351,6 @@ def create_lengths(text):
         lengths.append(len(sentence))
     return pd.DataFrame(lengths, columns=['counts'])
 
-
-# In[216]:
 
 lengths_summaries = create_lengths(int_summaries)
 lengths_texts = create_lengths(int_texts)
@@ -402,7 +362,6 @@ print("Texts:")
 print(lengths_texts.describe())
 
 
-# In[217]:
 
 # Inspect the length of texts
 print(np.percentile(lengths_texts.counts, 90))
@@ -410,7 +369,6 @@ print(np.percentile(lengths_texts.counts, 95))
 print(np.percentile(lengths_texts.counts, 99))
 
 
-# In[218]:
 
 # Inspect the length of summaries
 print(np.percentile(lengths_summaries.counts, 90))
@@ -418,7 +376,6 @@ print(np.percentile(lengths_summaries.counts, 95))
 print(np.percentile(lengths_summaries.counts, 99))
 
 
-# In[219]:
 
 def unk_counter(sentence):
     '''Counts the number of time UNK appears in a sentence.'''
@@ -428,12 +385,6 @@ def unk_counter(sentence):
             unk_count += 1
     return unk_count
 
-
-# In[220]:
-
-# Sort the summaries and texts by the length of the texts, shortest to longest
-# Limit the length of summaries and texts based on the min and max ranges.
-# Remove reviews that include too many UNKs
 
 sorted_summaries = []
 sorted_texts = []
@@ -467,32 +418,12 @@ print(len(sorted_summaries))
 print(len(sorted_texts))
 
 
-# ## Building the Model
-
-# In[221]:
-
-
-
-
-# In[222]:
-
-
-
-
-# In[223]:
-
-
-
-
-# In[228]:
-
 def pad_sentence_batch(sentence_batch):
     """Pad sentences with <PAD> so that each sentence of a batch has the same length"""
     max_sentence = max([len(sentence) for sentence in sentence_batch])
     return [sentence + [vocab_to_int['<PAD>']] * (max_sentence - len(sentence)) for sentence in sentence_batch]
 
 
-# In[229]:
 
 def get_batches(summaries, texts, batch_size):
     """Batch summaries, texts, and the lengths of their sentences together"""
@@ -515,9 +446,6 @@ def get_batches(summaries, texts, batch_size):
         yield pad_summaries_batch, pad_texts_batch, pad_summaries_lengths, pad_texts_lengths
 
 
-# In[230]:
-
-# Set the Hyperparameters
 epochs = 100
 batch_size = 64
 rnn_size = 256
@@ -525,22 +453,11 @@ num_layers = 2
 learning_rate = 0.005
 keep_probability = 0.75
 
-
-# In[231]:
-
-# ## Training the Model
-
-# Since I am training this model on my MacBook Pro, it would take me days if I used the whole dataset. For this reason, I am only going to use a subset of the data, so that I can train it over night. Normally I use [FloydHub's](https://www.floydhub.com/) services for my GPU needs, but it would take quite a bit of time to upload the dataset and ConceptNet Numberbatch, so I'm not going to bother with that for this project.
-# 
-# I chose not use use the start of the subset because I didn't want to make it too easy for my model. The texts that I am using are closer to the median lengths; I thought this would be more fair.
-
-# In[234]:
-
-# Subset the data for training
 start = 1
 end = start + 500000
 sorted_summaries_short = sorted_summaries[start:end]
 sorted_texts_short = sorted_texts[start:end]
+
 # Original data 
 sorted_original_summaries_short = sorted_original_summaries[start:end]
 sorted_original_texts_short = sorted_original_texts[start:end]
@@ -558,36 +475,12 @@ with open('Texts-file','wb') as fb:
     pickle.dump(sorted_texts_short,fb)   
     
     
-#Creat file of original data lists
+#Create file of original data lists
 with open('Original-Summaries-file','wb') as fb:
     pickle.dump(sorted_original_summaries_short,fb)
     
 with open('Original-Texts-file','wb') as fb:
     pickle.dump(sorted_original_texts_short,fb) 
-
-
-# In[158]:
-
-# Train the Model
-#learning_rate_decay = 0.95
-#min_learning_rate = 0.0005
-#display_step = 20 # Check training loss after every 20 batches
-#stop_early = 0 
-#stop = 3 # If the update loss does not decrease in 3 consecutive update checks, stop training
-#per_epoch = 3 # Make 3 update checks per epoch
-#update_check = (len(sorted_texts_short)//batch_size//per_epoch)-1
-#
-#update_loss = 0 
-#batch_loss = 0
-#summary_update_loss = [] # Record the update losses for saving improvements in the model
-#
-#checkpoint = "best_model.ckpt" 
-
-# ## Making Our Own Summaries
-
-# To see the quality of the summaries that this model can generate, you can either create your own review, or use a review from the dataset. You can set the length of the summary to a fixed value, or use a random value like I have here.
-
-# In[114]:
 
 def text_to_seq(text):
     '''Prepare the text for the model'''
@@ -596,12 +489,6 @@ def text_to_seq(text):
     return [vocab_to_int.get(word, vocab_to_int['<UNK>']) for word in text.split()]
 
 
-# In[167]:
-
-# Create your own review or use one from the dataset
-#input_sentence = "I have never eaten an apple before, but this red one was nice. \
-                  #I think that I will try a green apple next time."
-#text = text_to_seq(input_sentence)
 random = np.random.randint(0,len(clean_texts))
 input_sentence = clean_texts[random]
 text = text_to_seq(clean_texts[random])
@@ -620,30 +507,6 @@ print('  Word Ids:    {}'.format([i for i in text]))
 print('  Input Words: {}'.format(" ".join([int_to_vocab[i] for i in text])))
 
 print('\nSummary')
-
-
-
-# Examples of reviews and summaries:
-# - Review(1): The coffee tasted great and was at such a good price! I highly recommend this to everyone!
-# - Summary(1): great coffee
-# 
-# 
-# - Review(2): This is the worst cheese that I have ever bought! I will never buy it again and I hope you won't either!
-# - Summary(2): omg gross gross
-# 
-# 
-# - Review(3): love individual oatmeal cups found years ago sam quit selling sound big lots quit selling found target expensive buy individually trilled get entire case time go anywhere need water microwave spoon know quaker flavor packets
-# - Summary(3): love it
-
-# ## Summary
-
-# I hope that you found this project to be rather interesting and informative. One of my main recommendations for working with this dataset and model is either use a GPU, a subset of the dataset, or plenty of time to train your model. As you might be able to expect, the model will not be able to make good predictions just by seeing many reviews, it needs so see the reviews many times to be able to understand the relationship between words and between descriptions & summaries. 
-# 
-# In short, I'm pleased with how well this model performs. After creating numerous reviews and checking those from the dataset, I can happily say that most of the generated summaries are appropriate, some of them are great, and some of them make mistakes. I'll try to improve this model and if it gets better, I'll update my GitHub.
-# 
-# Thanks for reading!
-
-# In[ ]:
 
 
 
